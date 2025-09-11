@@ -2,6 +2,7 @@
 using System;
 using System.IO;               // ★ 파이썬 스크립트 경로 확인에 사용
 using System.Diagnostics;      // ★ 외부 프로세스 실행
+using System.Net.Http;         // ★ PDF 다운로드
 using SD = System.Drawing;
 using WF = System.Windows.Forms;
 
@@ -113,6 +114,13 @@ namespace MyApp
                         3 => "   · UNIT SIZE 구분",// ExcelUnitSizeView
                         _ => $"   · 블럭 {i}"
                     }
+                    : teamName == "영업팀"
+                    ? i switch
+                    {
+                        1 => "   · 파이썬 실행",
+                        2 => "   · PDF 다운로드",
+                        _ => $"   · 블럭 {i}"
+                    }
                     : $"   · 블럭 {i}";
 
                 var sub = new WF.Label
@@ -155,6 +163,11 @@ namespace MyApp
                     {
                         // 영업팀 - 버튼1: 파이썬 스크립트 실행
                         TryRunPythonScript();
+                    }
+                    else if (teamName == "영업팀" && idx == 2)
+                    {
+                        // 영업팀 - 버튼2: PDF 다운로드
+                        TryDownloadPdf();
                     }
                     else
                     {
@@ -246,6 +259,32 @@ namespace MyApp
             catch (Exception ex)
             {
                 WF.MessageBox.Show("파이썬 실행 오류: " + ex.Message, "오류");
+            }
+        }
+
+        private void TryDownloadPdf()
+        {
+            try
+            {
+                const string pdfUrl = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
+
+                using var client = new HttpClient();
+                using var dialog = new WF.SaveFileDialog
+                {
+                    Filter = "PDF files (*.pdf)|*.pdf",
+                    FileName = "sample.pdf"
+                };
+
+                if (dialog.ShowDialog() == WF.DialogResult.OK)
+                {
+                    var data = client.GetByteArrayAsync(pdfUrl).GetAwaiter().GetResult();
+                    File.WriteAllBytes(dialog.FileName, data);
+                    WF.MessageBox.Show("PDF 다운로드 완료", "정보");
+                }
+            }
+            catch (Exception ex)
+            {
+                WF.MessageBox.Show("PDF 다운로드 오류: " + ex.Message, "오류");
             }
         }
 
