@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup />
+  <ItemGroup>
+    <Compile Update="src\UI\Forms\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="src\UI\Views\ExcelUnitSizeView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="src\UI\Views\QuantityCompareView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="src\UI\Views\QuantitySplitView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+  </ItemGroup>
+</Project>
