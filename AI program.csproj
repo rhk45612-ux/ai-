@@ -13,6 +13,7 @@
     <PackageReference Include="ClosedXML" Version="0.105.0" />
     <PackageReference Include="EPPlus" Version="7.1.0" />
     <PackageReference Include="EPPlus.Interfaces" Version="8.1.0" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="3.0.2" />
   </ItemGroup>
 
   <!-- 소스 코드 -->
@@ -28,6 +29,7 @@
     <Compile Include="src\UI\Views\QuantityCompareView.cs" />
     <Compile Include="src\UI\Views\QuantitySplitView.cs" />
     <Compile Include="src\UI\Views\ExcelUnitSizeView.cs" />
+    <Compile Include="WordComparatorView.cs" />
   </ItemGroup>
 
   <!-- 리소스(.resx) - 디자이너 종속성 연결 -->

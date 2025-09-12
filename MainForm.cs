@@ -102,7 +102,7 @@ namespace MyApp
             submenu.BringToFront();
 
             // 하위 항목(버튼 1~3에 해당)
-            for (int i = 1; i <= 3; i++)
+            for (int i = 1; i <= 4; i++)
             {
                 string caption =
                     teamName == "설계팀"
@@ -111,6 +111,7 @@ namespace MyApp
                         1 => "   · 물량 구분",     // QuantitySplitView
                         2 => "   · 물량 비교",     // QuantityCompareView
                         3 => "   · UNIT SIZE 구분",// ExcelUnitSizeView
+                        4 => "   · 워드 비교",      // WordComparatorView
                         _ => $"   · 블럭 {i}"
                     }
                     : $"   · 블럭 {i}";
@@ -149,6 +150,10 @@ namespace MyApp
                         else if (idx == 3)
                         {
                             ShowInMain(new ExcelUnitSizeView());
+                        }
+                        else if (idx == 4)
+                        {
+                            ShowInMain(new WordComparatorView());
                         }
                     }
                     else if (teamName == "영업팀" && idx == 1)
