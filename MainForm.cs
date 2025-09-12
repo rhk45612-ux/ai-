@@ -101,8 +101,9 @@ namespace MyApp
             menuContainer.Controls.Add(submenu);
             submenu.BringToFront();
 
-            // 하위 항목(버튼 1~3에 해당)
-            for (int i = 1; i <= 3; i++)
+            // 하위 항목(버튼 1~N에 해당)
+            int subCount = teamName == "설계팀" ? 4 : 3;
+            for (int i = 1; i <= subCount; i++)
             {
                 string caption =
                     teamName == "설계팀"
@@ -111,6 +112,7 @@ namespace MyApp
                         1 => "   · 물량 구분",     // QuantitySplitView
                         2 => "   · 물량 비교",     // QuantityCompareView
                         3 => "   · UNIT SIZE 구분",// ExcelUnitSizeView
+                        4 => "   · 1차 전류 계산기", // CurrentCalculator
                         _ => $"   · 블럭 {i}"
                     }
                     : $"   · 블럭 {i}";
@@ -150,11 +152,15 @@ namespace MyApp
                         {
                             ShowInMain(new ExcelUnitSizeView());
                         }
+                        else if (idx == 4)
+                        {
+                            TryRunPythonScript("current_calculator.py");
+                        }
                     }
                     else if (teamName == "영업팀" && idx == 1)
                     {
                         // 영업팀 - 버튼1: 파이썬 스크립트 실행
-                        TryRunPythonScript();
+                        TryRunPythonScript("myscript.py");
                     }
                     else
                     {
@@ -183,7 +189,7 @@ namespace MyApp
             frame.Click += Toggle; lbl.Click += Toggle; arrow.Click += Toggle;
         }
 
-        private void TryRunPythonScript()
+        private void TryRunPythonScript(string scriptFileName = "myscript.py")
         {
             try
             {
@@ -193,9 +199,9 @@ namespace MyApp
                 string? scriptPath = null;
                 string[] candidates =
                 {
-                    Path.Combine(baseDir, "myscript.py"),
-                    Path.Combine(baseDir, "PythonScripts", "myscript.py"),
-                    Path.Combine(baseDir, "pythonscripts", "myscript.py"),
+                    Path.Combine(baseDir, scriptFileName),
+                    Path.Combine(baseDir, "PythonScripts", scriptFileName),
+                    Path.Combine(baseDir, "pythonscripts", scriptFileName),
                 };
 
                 foreach (var c in candidates)
@@ -209,10 +215,10 @@ namespace MyApp
                     string projRoot = Path.GetFullPath(Path.Combine(baseDir, "..", "..", ".."));
                     string[] devCandidates =
                     {
-                        Path.Combine(projRoot, "PythonScripts", "myscript.py"),
-                        Path.Combine(projRoot, "pythonscripts", "myscript.py"),
-                        Path.Combine(projRoot, "src", "PythonScripts", "myscript.py"),
-                        Path.Combine(projRoot, "src", "pythonscripts", "myscript.py"),
+                        Path.Combine(projRoot, "PythonScripts", scriptFileName),
+                        Path.Combine(projRoot, "pythonscripts", scriptFileName),
+                        Path.Combine(projRoot, "src", "PythonScripts", scriptFileName),
+                        Path.Combine(projRoot, "src", "pythonscripts", scriptFileName),
                     };
                     foreach (var c in devCandidates)
                     {
@@ -223,9 +229,9 @@ namespace MyApp
                 if (scriptPath == null)
                 {
                     WF.MessageBox.Show(
-                        "myscript.py를 찾을 수 없습니다.\n" +
+                        $"{scriptFileName}를 찾을 수 없습니다.\n" +
                         "· 파일 속성: Build Action=Content, Copy to Output Directory=Copy if newer/Always\n" +
-                        "· 경로: (출력 폴더)\\PythonScripts\\myscript.py 에 존재하는지 확인하세요.",
+                        $"· 경로: (출력 폴더)\\PythonScripts\\{scriptFileName} 에 존재하는지 확인하세요.",
                         "오류");
                     return;
                 }
