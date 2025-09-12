@@ -311,28 +311,34 @@ class WordComparatorGUI:
     
     def compare_by_words(self):
         """단어 단위로 비교합니다."""
-        matcher = difflib.SequenceMatcher(None, self.file1_content, self.file2_content)
-        
+        import re
+
+        # 단어와 공백을 모두 포함하도록 토큰화
+        tokens1 = re.findall(r'\S+|\s+', self.file1_content)
+        tokens2 = re.findall(r'\S+|\s+', self.file2_content)
+
+        matcher = difflib.SequenceMatcher(None, tokens1, tokens2)
+
         for tag, i1, i2, j1, j2 in matcher.get_opcodes():
             if tag == 'equal':
-                text = self.file1_content[i1:i2]
+                text = ''.join(tokens2[j1:j2])
                 self.result_text.insert(tk.END, text, "normal")
                 self.diff_data.append(('equal', text))
             elif tag == 'delete':
-                text = self.file1_content[i1:i2]
+                text = ''.join(tokens1[i1:i2])
                 self.result_text.insert(tk.END, text, "removed")
                 self.diff_data.append(('delete', text))
             elif tag == 'insert':
-                text = self.file2_content[j1:j2]
+                text = ''.join(tokens2[j1:j2])
                 self.result_text.insert(tk.END, text, "added")
                 self.diff_data.append(('insert', text))
             elif tag == 'replace':
                 # 삭제된 부분
-                text1 = self.file1_content[i1:i2]
+                text1 = ''.join(tokens1[i1:i2])
                 self.result_text.insert(tk.END, text1, "removed")
                 self.diff_data.append(('delete', text1))
                 # 추가된 부분
-                text2 = self.file2_content[j1:j2]
+                text2 = ''.join(tokens2[j1:j2])
                 self.result_text.insert(tk.END, text2, "added")
                 self.diff_data.append(('insert', text2))
     
@@ -602,6 +608,5 @@ def main():
     root = tk.Tk()
     app = WordComparatorGUI(root)
     root.mainloop()
-
 if __name__ == "__main__":
     main()
