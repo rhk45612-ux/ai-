@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.105.0" />
+    <PackageReference Include="EPPlus" Version="7.1.0" />
+    <PackageReference Include="EPPlus.Interfaces" Version="8.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="src\\App\\Program.cs" />
+    <Compile Include="src\\UI\\Forms\\MainForm.cs" />
+    <Compile Include="src\\UI\\Views\\ExcelUnitSizeView.cs" />
+  </ItemGroup>
+</Project>
